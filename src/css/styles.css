@@ -21,7 +21,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 35px 10px 20px;
+    padding: 15px 0 10px;
     margin: 50px 10px;
     background-color: #EEEEEE;
     user-select: none;
@@ -30,7 +30,8 @@ body {
 .range-value {
     flex: initial;
     width: 80px;
-    margin: 0 30px;
+    margin: 0 10px;
+    padding: 0 10px;
     text-align: center;
     line-height: 25px;
     border: 1px solid #00838F;
@@ -71,6 +72,14 @@ span.max-value {
     z-index: 3;
 }
 
+.slider-value {
+    position: absolute;
+    top: -25px;
+    left: -25px;
+    width: 50px;
+    text-align: center;
+}
+
 .draggable > span {
     font-size: 13px;
     font-weight: 100;
@@ -88,36 +97,4 @@ span.max-value {
     border-radius: 5px;
     margin: auto;
     background-color: #CFD8DC;
-}
-
-.value-container {
-    font-size: 15px;
-    position: absolute;
-    width: 170px;
-    padding: 5px 20px;
-    left: 0;
-    right: 0;
-    margin: 10px auto;
-    bottom: 5px;
-    border: 1px solid #00838F;
-    border-radius: 5px;
-}
-
-.value-container p {
-    float: left;
-}
-
-span.value {
-    font-weight: bold;
-    color: #00838F;
-    float: right;
-}
-
-.left-slider-value,
-.right-slider-value {
-    position: absolute;
-    top: -30px;
-    left: -25px;
-    width: 50px;
-    text-align: center;
 }
