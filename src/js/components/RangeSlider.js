@@ -66,7 +66,6 @@ export default class RangeSlider extends React.Component {
             currentValue: updatedSliderValue,
         } );
 
-        // this.renderProgressBar();
         // evt.preventDefault();
         // evt.stopPropagation();
     }
