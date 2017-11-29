@@ -1,6 +1,6 @@
 import React from "react";
 import SliderHandle from "./SliderHandle";
-
+/* eslint react/prop-types: off */
 export default class RangeSlider extends React.Component {
     constructor( props ) {
         super( props );
