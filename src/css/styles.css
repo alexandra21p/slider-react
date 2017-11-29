@@ -25,6 +25,9 @@ body {
     margin: 50px 10px;
     background-color: #EEEEEE;
     user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
 }
 
 .range-value {
@@ -53,6 +56,10 @@ span.max-value {
     background-color: #fff;
     margin: 0 20px;
     z-index: 1;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
 }
 
 .draggable {

@@ -10,6 +10,8 @@ export default class RangeSlider extends React.Component {
         };
 
         this.setInitialCoordinates = this.setInitialCoordinates.bind( this );
+        this.moveSlider = this.moveSlider.bind( this );
+        this.handleMouseUp = this.handleMouseUp.bind( this );
     }
 
     componentDidMount() {
@@ -17,24 +19,65 @@ export default class RangeSlider extends React.Component {
         const parentProperties = rangeContainer.getBoundingClientRect();
         const parentWidth = parseInt( parentProperties.width, 10 );
         const parentLeftOffset = parentProperties.left;
+        const sliderOffset = this.computeLeftOffset( parentWidth );
 
         this.setState( {
             parentWidth,
             parentLeftOffset,
+            sliderOffset,
         } );
+    }
+
+    componentWillUnmount() {
+        document.body.removeEventListener( "mousemove", this.moveSlider );
+        document.body.removeEventListener( "mouseup", this.handleMouseUp );
     }
 
     setInitialCoordinates( evt ) {
         const { parentLeftOffset, parentWidth } = this.state;
-        const positionX = evt.clientX;
-        const sliderOffset = Math.min( Math.max( positionX - parentLeftOffset, 0 ), parentWidth );
-        const updatedSliderValue = this.changeCurrentValue( sliderOffset );
+        const position = evt.clientX;
+        const updatedOffset = Math.min( Math.max( position - parentLeftOffset, 0 ), parentWidth );
+        const updatedSliderValue = this.changeCurrentValue( updatedOffset );
 
         this.setState( {
             canMove: true,
-            sliderOffset,
+            sliderOffset: updatedOffset,
             currentValue: updatedSliderValue,
         } );
+
+        this.addBodyEvents();
+        evt.preventDefault();
+    }
+
+    moveSlider( evt ) {
+        const { canMove, parentLeftOffset, parentWidth } = this.state;
+        if ( !canMove ) {
+            return;
+        }
+
+        const positionX = evt.clientX;
+        const rightLimit = parentWidth + parentLeftOffset;
+        const computedPosition = Math.min( Math.max( positionX, parentLeftOffset ), rightLimit );
+        const updatedOffset = computedPosition - parentLeftOffset;
+        const updatedSliderValue = this.changeCurrentValue( updatedOffset );
+
+        this.setState( {
+            sliderOffset: updatedOffset,
+            currentValue: updatedSliderValue,
+        } );
+
+        // this.renderProgressBar();
+        // evt.preventDefault();
+        // evt.stopPropagation();
+    }
+
+    handleMouseUp( ) {
+        this.setState( {
+            canMove: false,
+        } );
+
+        // evt.preventDefault();
+        // evt.stopPropagation();
     }
 
     changeCurrentValue( leftOffset ) {
@@ -42,8 +85,20 @@ export default class RangeSlider extends React.Component {
         return Math.round( leftOffset * unitPerPixel );
     }
 
-    render() {
+    computeLeftOffset( parentWidth ) {
+        const unitPerPixel = this.props.maximum / parseInt( parentWidth, 10 );
         const value = !this.state.currentValue ? this.props.initialValue : this.state.currentValue;
+        return value / unitPerPixel;
+    }
+
+    addBodyEvents() {
+        document.body.addEventListener( "mousemove", this.moveSlider );
+        document.body.addEventListener( "mouseup", this.handleMouseUp );
+    }
+
+    render() {
+        const { currentValue } = this.state;
+        const value = currentValue === undefined ? this.props.initialValue : currentValue;
 
         return (
             <div className="slider-container">
